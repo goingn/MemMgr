@@ -17,6 +17,15 @@ typedef struct memhdr_struct {
 	unsigned int size;
 } HEADER;
 
+int memleft;
+int heapsize;
+int maxallocatedspace;
+void* heapstart;
+void* heapend;
+long int mallocCount;
+long int freeCount;
+FILE* logFile;
+
 void memmgr_free(void* ap);
 void* memmgr_malloc(int nbytes);
 void memmgr_init(void* pheapStart, void* pheapEnd, FILE* logFile);
