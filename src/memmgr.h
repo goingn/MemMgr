@@ -12,11 +12,12 @@
 
 #include <stdio.h>
 
-typedef struct memhdr_struct {
-	struct hdr *ptr;
+typedef struct hdr {
+	struct hdr* ptr;
 	unsigned int size;
 } HEADER;
 
+HEADER* frhd;
 int memleft;
 int heapsize;
 int maxallocatedspace;
