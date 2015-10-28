@@ -8,15 +8,18 @@ CPP_SRCS += \
 ../src/testMemMgr.cpp 
 
 C_SRCS += \
-../src/baseCode.c 
+../src/baseCode.c \
+../src/memmgr.c 
 
 OBJS += \
 ./src/baseCode.o \
 ./src/ftest.o \
+./src/memmgr.o \
 ./src/testMemMgr.o 
 
 C_DEPS += \
-./src/baseCode.d 
+./src/baseCode.d \
+./src/memmgr.d 
 
 CPP_DEPS += \
 ./src/ftest.d \
