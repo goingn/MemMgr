@@ -12,6 +12,11 @@
 
 #include <stdio.h>
 
+typedef struct memhdr_struct {
+	struct hdr *ptr;
+	unsigned int size;
+} HEADER;
+
 void memmgr_free(void* ap);
 void* memmgr_malloc(int nbytes);
 void memmgr_init(void* pheapStart, void* pheapEnd, FILE* logFile);
