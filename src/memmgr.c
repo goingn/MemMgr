@@ -16,7 +16,12 @@ void memmgr_free(void* ap) {
 void* memmgr_malloc(int nbytes) {
 	return NULL;
 }
-void memmgr_init(void* pheapStart, void* pheapEnd, FILE* logFile) {
+void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
+	frhd = &heapstart;
+	frhd->ptr = NULL;
+	frhd->size = ((char*)&heapend - (char*)&heapstart) / sizeof(HEADER);
+	memleft = frhd->size;
+	logFile = log;
 }
 int memmgr_get_remaining_space(void) {
 	return 0;
@@ -31,10 +36,10 @@ int memmgr_get_maximum_allocated_space(void) {
 	return 0;
 }
 int memmgr_get_malloc_count(void) {
-	return 0;
+	return mallocCount;
 }
 int memmgr_get_free_count(void) {
-	return 0;
+	return freeCount;
 }
 void logMemoryFree(void* address) {
 }

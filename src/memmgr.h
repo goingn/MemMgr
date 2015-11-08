@@ -21,8 +21,8 @@ HEADER* frhd;
 int memleft;
 int heapsize;
 int maxallocatedspace;
-void* heapstart;
-void* heapend;
+HEADER heapstart;
+HEADER heapend;
 long int mallocCount;
 long int freeCount;
 FILE* logFile;
@@ -48,10 +48,10 @@ void* memmgr_malloc(int nbytes);
  *
  * @param void* pheapStart : starting location
  * @param void* pheapEnd : ending location
- * @param FILE* logFile : FILE pointer if log file is to be created,
+ * @param FILE* log : FILE pointer if log file is to be created,
  * NULL  otherwise
  */
-void memmgr_init(void* pheapStart, void* pheapEnd, FILE* logFile);
+void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log);
 
 /**
  * Gets remaining free space that can be allocated, equal to total space
