@@ -17,11 +17,13 @@ void* memmgr_malloc(int nbytes) {
 	return NULL;
 }
 void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
-	frhd = &heapstart;
+	frhd = (HEADER*)&heapstart;
 	frhd->ptr = NULL;
-	frhd->size = ((char*)&heapend - (char*)&heapstart) / sizeof(HEADER);
+	frhd->size = ((char*) &heapend - (char*) &heapstart) / sizeof(HEADER);
 	memleft = frhd->size;
-	logFile = log;
+	if (log) {
+		logFile = log;
+	}
 }
 int memmgr_get_remaining_space(void) {
 	return 0;
