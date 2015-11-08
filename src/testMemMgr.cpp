@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define MAX_HEAP_SIZE (1024 * 64)
-#define HEADER_SIZE sizeof(memhdr_struct)
+#define HEADER_SIZE sizeof(hdr)
 #define BASE_AVAILABLE_MEMORY (MAX_HEAP_SIZE-HEADER_SIZE)
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MemMgrTestCase);
