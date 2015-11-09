@@ -68,7 +68,7 @@ int memmgr_get_remaining_space(void) {
 }
 
 int memmgr_get_number_of_fragments(void) {
-	return 0;
+	return frhd -> size -1;
 }
 
 int memmgr_get_allocated_space(void) {
