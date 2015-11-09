@@ -12,6 +12,68 @@
 #include "memmgr.h"
 
 void memmgr_free(void* ap) {
+	HEADER *nxt, *prev, *f;
+	f = (HEADER *)ap -1;
+	memleft += f->size;
+	freeCount++;
+
+	/*frhd is not NULL. Only NULL if memmgr_init was not called,
+	  which should never happen.*/
+	if(frhd > f){
+		//Free-space head is higher up in memory than returnee
+		nxt = frhd;
+		frhd = f;
+		prev = f + f->size;
+
+		if(prev == nxt){
+			f-> size += nxt->size;
+			f->ptr = nxt->ptr;
+		}
+		else{
+			f->ptr = nxt;
+			return;
+		}
+	}
+
+	/*Otherwise, current free-space head is lower in memory. Move back on
+	 *the free-space list looking for the block being returned. If the next
+	 *pointer points past the block, make a new entry and link it. If next
+	 *pointer plus its size points to the block, form one contiguous block.
+	*/
+	nxt = frhd;
+	for(nxt = frhd; nxt && nxt < f; prev=nxt, nxt=nxt->ptr){
+		if(nxt+nxt->size == f){
+			nxt->size += f->size;
+			f = nxt + nxt->size;
+			if(f == nxt->ptr){
+				/*The new, larger block is contiguous to the next free block,
+				 * so form a larger block. There's no need to continue this
+				 * checking since if the block following this free one were
+				 * free, the two would already have been combined;.
+				 */
+				nxt->size += f->size;
+				nxt->ptr = f->ptr;
+			}
+			return;
+		}
+	}
+
+	/*The address of the block being returned is greater than one in the free
+	 *queue (nxt) or the end of the queue was reached. If at end, just link to
+	 *the end of the queue. Therefore, nxt is NULL or points to a block higher
+	 *up in memory than the one being returned.
+	 */
+
+	prev->ptr = f;
+	prev = f + f->size;
+	if(prev == nxt){
+		f->size += nxt->size;
+		f->ptr = nxt->ptr;
+	}
+	else{
+		f->ptr = nxt;
+		return;
+	}
 }
 
 void* memmgr_malloc(int nbytes) {
