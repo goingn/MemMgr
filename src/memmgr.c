@@ -114,10 +114,11 @@ void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
 
 		heapstart = (char*) pheapStart;
 		heapend = (char*) pheapEnd;
+		heapsize = heapstart - heapend;
 		frhd = (HEADER*) &heapstart;
 		frhd->ptr = NULL;
 		frhd->size = ((char*) &heapend - (char*) &heapstart) / sizeof(HEADER);
-		memleft = frhd->size;
+		memleft = frhd->size - 1; //minus one header block. Always has header
 
 	}
 	if (log) {
@@ -130,11 +131,21 @@ int memmgr_get_remaining_space(void) {
 }
 
 int memmgr_get_number_of_fragments(void) {
-	return frhd -> size -1;
+	int numOfFragments = 0;
+	HEADER* nxt;
+
+	nxt = frhd;
+
+	while(nxt->ptr != NULL){
+		numOfFragments++;
+		nxt = nxt -> ptr;
+	}
+
+	return numOfFragments;
 }
 
 int memmgr_get_allocated_space(void) {
-	return 0;
+
 }
 
 int memmgr_get_maximum_allocated_space(void) {
