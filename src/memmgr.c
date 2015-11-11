@@ -89,7 +89,7 @@ void* memmgr_malloc(int nbytes) {
 				nxt += nxt->size;
 				nxt->size = nunits;
 			} else {
-				if (!prev) {
+				if (prev == NULL) {
 					frhd = nxt->ptr;
 				} else {
 					prev->ptr = nxt->ptr;
@@ -112,13 +112,13 @@ void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
 	freeCount = 0;
 	if ((pheapStart) && (pheapEnd)) {
 
-		heapstart = (char*) pheapStart;
-		heapend = (char*) pheapEnd;
-		heapsize = heapstart - heapend;
+		heapstart = (char*)pheapStart;
+		heapend = (char*)pheapEnd;
+		heapsize = (char*)&heapend - (char*)&heapstart;
 		frhd = (HEADER*) &heapstart;
 		frhd->ptr = NULL;
-		frhd->size = ((char*) &heapend - (char*) &heapstart) / sizeof(HEADER);
-		memleft = frhd->size - 1; //minus one header block. Always has header
+		frhd->size = heapsize / sizeof(HEADER);
+		memleft = frhd->size;
 
 	}
 	if (log) {
@@ -131,7 +131,7 @@ int memmgr_get_remaining_space(void) {
 }
 
 int memmgr_get_number_of_fragments(void) {
-	int numOfFragments = 0;
+	int numOfFragments = 1;
 	HEADER* nxt;
 
 	nxt = frhd;
@@ -145,7 +145,8 @@ int memmgr_get_number_of_fragments(void) {
 }
 
 int memmgr_get_allocated_space(void) {
-
+	unsigned int totalSpace = heapsize / sizeof(HEADER);
+	return totalSpace - memleft;
 }
 
 int memmgr_get_maximum_allocated_space(void) {
