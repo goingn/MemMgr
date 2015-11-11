@@ -111,11 +111,10 @@ void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
 	mallocCount = 0;
 	freeCount = 0;
 	if ((pheapStart) && (pheapEnd)) {
-
-		heapstart = (char*)pheapStart;
-		heapend = (char*)pheapEnd;
-		heapsize = (char*)&heapend - (char*)&heapstart;
-		frhd = (HEADER*) &heapstart;
+		heapstart = pheapStart;
+		heapend = pheapEnd;
+		heapsize = (char*)heapend - (char*)heapstart;
+		frhd = (HEADER*) heapstart;
 		frhd->ptr = NULL;
 		frhd->size = heapsize / sizeof(HEADER);
 		memleft = frhd->size;
@@ -127,11 +126,11 @@ void memmgr_init(void* pheapStart, void* pheapEnd, FILE* log) {
 }
 
 int memmgr_get_remaining_space(void) {
-	return memleft;
+	return memleft * sizeof(HEADER);
 }
 
 int memmgr_get_number_of_fragments(void) {
-	int numOfFragments = 1;
+	int numOfFragments = 0;
 	HEADER* nxt;
 
 	nxt = frhd;
